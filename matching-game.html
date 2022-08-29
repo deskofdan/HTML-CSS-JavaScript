@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/Three-dingos.png" type="image/x-icon">
+    <title>Matching Game</title>
+    <style>
+        img{position: absolute;}
+        div{
+            position: absolute;
+            width: 500px;
+            height: 500px;
+        }
+        #rightSide{
+            left: 500px;
+            border-left: 2px solid;
+        }
+    </style>
+</head>
+<body>
+    <h1>Matching Game</h1>
+    <button onclick = "generateFaces()">Start Game</button>
+    <p>Click on the extra dingos on the left.</p>
+    <main id="board">
+        <div id="leftSide">
+            <!--img src="images/Three-dingos.gif" style="top: 100px; left: 100px; width: 100px;">-->
+        </div>
+        <div id="rightSide"></div>
+    </main>
+    <script>
+        let numberOfDingos = 5;
+        let theLeftSide = document.getElementById('leftSide');
+        let theRightSide = document.getElementById('rightSide');
+        function generateFaces(){
+            for(let i = 1; i<= numberOfDingos;i++){
+                let randomTop = Math.floor(Math.random() * 400);
+                let randomLeft = Math.floor(Math.random() * 400);
+                const face = document.createElement('img');
+                        face.src = 'images/Three-dingos.gif';
+                        face.style.top = randomTop + "px";
+                        face.style.left = randomLeft + "px";
+                theLeftSide.appendChild(face);
+            }
+            const leftSideImages = theLeftSide.cloneNode(true);
+                  leftSideImages.removeChild(leftSideImages.lastChild);
+                  theRightSide.appendChild(leftSideImages);
+                  theLeftSide.lastChild.addEventListener('click', nextLevel);
+                  document.getElementById('board').addEventListener('click', gameOver);
+        }
+        function nextLevel(event) {
+            alert('you win');
+            event.stopPropagation();
+            while (theLeftSide.firstChild) {
+                theLeftSide.removeChild(theLeftSide.firstChild);
+            }
+            theRightSide.innerHTML ="";
+            numberOfDingos += 5;
+            generateFaces();
+
+        }
+        function gameOver() {
+            alert('you lose');
+            document.getElementById('board').removeEventListener('click', gameOver);
+            theLeftSide.lastChild.removeEventListener('click', nextLevel);
+            while (theLeftSide.firstChild) {
+                theLeftSide.removeChild(theLeftSide.firstChild);
+            }
+            theRightSide.innerHTML ="";
+            numberOfDingos = 5;
+        }
+    </script>
+</body>
+</html>
